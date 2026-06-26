@@ -1,0 +1,15 @@
+{
+	"$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
+	"ignoreDependencies": [
+		"@twodft/astro-icon",
+		"@astrojs/compiler-rs",
+		"@iconify-json/ri",
+		"astro",
+		"@astrojs/sitemap",
+		"astro-robots-txt",
+		"open-props",
+		"sharp",
+		"node-addon-api",
+		"node-gyp"
+	]
+}
