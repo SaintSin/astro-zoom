@@ -215,12 +215,12 @@ Both components are compatible with Astro's ClientRouter (view transitions). No 
 ```astro
 ---
 // Layout.astro
-import { ViewTransitions } from 'astro:transitions'
+import { ClientRouter } from 'astro:transitions'
 import { AstroZoomInit } from 'astro-zoom'
 ---
 <html>
   <head>
-    <ViewTransitions />
+    <ClientRouter />
   </head>
   <body>
     <slot />

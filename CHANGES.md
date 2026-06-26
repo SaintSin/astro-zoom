@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1 — 2026-06-26
+
+- Fix outdated `ViewTransitions` import in README — updated to `ClientRouter` (Astro 5+)
+
 ## 0.1.0 — 2026-06-26
 
 Initial release.
