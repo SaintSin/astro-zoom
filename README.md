@@ -96,6 +96,7 @@ Click the image to zoom. Click the backdrop or press Escape to close.
 | `background` | `string` | `color-mix(in oklch, var(--color-bg, oklch(99% 0 0)) 95%, transparent)` | Modal backdrop colour |
 | `duration` | `number` | `0.3` | Animation duration in seconds |
 | `class` | `string` | — | CSS class applied to the outer `<figure>` element |
+| `imageClass` | `string` | — | CSS class applied to the thumbnail `<img>` element |
 
 ### `<AstroZoomInit>`
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2 — 2026-06-26
+
+- Add `imageClass` prop to `<AstroZoom>` — applies a CSS class to the thumbnail `<img>` element
+
 ## 0.1.1 — 2026-06-26
 
 - Fix outdated `ViewTransitions` import in README — updated to `ClientRouter` (Astro 5+)
