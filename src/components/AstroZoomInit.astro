@@ -95,10 +95,16 @@ const {
   const dialog = document.querySelector<HTMLDialogElement>('dialog[data-az-singleton]')
   const dialogImg = dialog?.querySelector<HTMLImageElement>('img')
   let closing = false
+  let currentTrigger: HTMLImageElement | null = null
+
+  function dispatch(name: string) {
+    currentTrigger?.dispatchEvent(new CustomEvent(`astro-zoom:${name}`, { bubbles: true }))
+  }
 
   function open(trigger: HTMLImageElement) {
     if (!dialog || !dialogImg || dialog.open) return
 
+    currentTrigger = trigger
     const rect = trigger.getBoundingClientRect()
     dialogImg.src = trigger.dataset.zoomSrc || trigger.currentSrc || trigger.src
     dialogImg.alt = trigger.alt
@@ -129,7 +135,11 @@ const {
     void dialogImg.offsetWidth
     dialogImg.style.animation = ''
 
+    dispatch('open')
     dialog.showModal()
+
+    const duration = parseFloat(getComputedStyle(dialog).getPropertyValue('--az-duration')) * 1000 || 300
+    setTimeout(() => dispatch('opened'), duration)
   }
 
   async function close() {
@@ -141,6 +151,8 @@ const {
       ? 1
       : parseFloat(getComputedStyle(dialog).getPropertyValue('--az-duration')) * 1000 || 300
 
+    dispatch('close')
+
     dialogImg.style.animation = 'az-zoom-out var(--az-duration) ease forwards'
     if (reducedMotion) dialogImg.style.animationDuration = '0.001s'
     dialog.classList.add('az-closing')
@@ -150,14 +162,20 @@ const {
     dialog.close()
     dialog.classList.remove('az-closing')
     dialogImg.style.animation = ''
+    dispatch('closed')
     closing = false
+    currentTrigger = null
   }
 
   function init() {
     if (!dialog) return
 
-    dialog.addEventListener('click', (e) => { if (e.target === dialog) close() })
-    dialog.addEventListener('cancel', (e) => { e.preventDefault(); close() })
+    // Guard dialog listeners — only attach once, they persist across ClientRouter navigations
+    if (!dialog.dataset.azInit) {
+      dialog.dataset.azInit = 'true'
+      dialog.addEventListener('click', (e) => { if (e.target === dialog) close() })
+      dialog.addEventListener('cancel', (e) => { e.preventDefault(); close() })
+    }
 
     document.querySelectorAll<HTMLImageElement>('img[data-zoom]').forEach((img) => {
       if (img.dataset.zoomInit) return

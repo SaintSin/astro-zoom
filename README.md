@@ -181,6 +181,54 @@ import img3 from '../assets/img3.jpg'
 }
 ```
 
+## Events
+
+Both components dispatch custom events on the trigger `<img>` element, bubbling up the DOM.
+
+| Event | Fires |
+|---|---|
+| `astro-zoom:open` | When zoom begins (before animation) |
+| `astro-zoom:opened` | After the zoom-in animation completes |
+| `astro-zoom:close` | When close begins (before animation) |
+| `astro-zoom:closed` | After the dialog closes |
+
+```js
+// On a specific image
+document.querySelector('#my-photo').addEventListener('astro-zoom:opened', () => {
+  console.log('zoomed in')
+})
+
+// Or with event delegation
+document.addEventListener('astro-zoom:closed', (e) => {
+  analytics.track('image_zoomed', { src: e.target.src })
+})
+```
+
+## ClientRouter
+
+Both components are compatible with Astro's ClientRouter (view transitions). No extra configuration needed.
+
+`<AstroZoom>` re-initialises automatically on each `astro:page-load` event, picking up any new instances rendered on the incoming page.
+
+`<AstroZoomInit>` should be placed in your layout (outside the transitioning content) so the singleton dialog persists across navigations. The script attaches to new `img[data-zoom]` elements on each page load automatically.
+
+```astro
+---
+// Layout.astro
+import { ViewTransitions } from 'astro:transitions'
+import { AstroZoomInit } from 'astro-zoom'
+---
+<html>
+  <head>
+    <ViewTransitions />
+  </head>
+  <body>
+    <slot />
+    <AstroZoomInit />  <!-- outside <slot />, persists across navigations -->
+  </body>
+</html>
+```
+
 ## How it works
 
 Each `<AstroZoom>` instance renders a `<figure>` containing:
@@ -208,6 +256,12 @@ No runtime DOM construction. No external dependencies beyond Astro itself.
 - Astro 5, 6, 7
 - Node 22.12.0+
 - All modern browsers (uses `<dialog>`, `dvw`/`dvh`, `::backdrop`)
+
+## Credits
+
+Inspired by [medium-zoom](https://github.com/francoischalifour/medium-zoom) by François Chalifour — the `data-zoom` API and event naming follow its conventions.
+
+The zoom animation approach — `transform-origin: top left`, CSS custom properties for initial/final positions, and the `<dialog>`-based architecture — is derived from [astro-pandabox](https://github.com/SaintSin/astro-pandabox), a full lightbox/gallery component for Astro.
 
 ## License
 
