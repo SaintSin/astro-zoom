@@ -1,0 +1,171 @@
+---
+interface Props {
+	margin?: number;
+	background?: string;
+	duration?: number;
+}
+
+const {
+	margin = 40,
+	background = "color-mix(in oklch, var(--color-bg, oklch(99% 0 0)) 95%, transparent)",
+	duration = 0.3,
+} = Astro.props;
+---
+
+<dialog
+  class="az-dialog"
+  data-az-singleton
+  aria-label="Zoomed image"
+  style={`--az-margin:${margin}px;--az-bg:${background};--az-duration:${duration}s`}
+>
+  <img class="az-img" src="" alt="" />
+</dialog>
+
+<style is:global>
+  img[data-zoom] {
+    cursor: zoom-in;
+  }
+
+  .az-dialog {
+    position: fixed;
+    inset: 0;
+    margin: 0;
+    width: 100dvw;
+    height: 100dvh;
+    max-width: 100dvw;
+    max-height: 100dvh;
+    padding: 0;
+    border: none;
+    background: transparent;
+    overflow: hidden;
+  }
+
+  .az-dialog::backdrop {
+    background: var(--az-bg, color-mix(in oklch, var(--color-bg, oklch(99% 0 0)) 95%, transparent));
+    opacity: 0;
+    transition: opacity var(--az-duration, 0.3s) ease;
+  }
+
+  .az-dialog[open]::backdrop {
+    opacity: 1;
+  }
+
+  .az-dialog.az-closing::backdrop {
+    opacity: 0;
+  }
+
+  .az-dialog img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: auto;
+    height: auto;
+    max-width: calc(100dvw - 2 * var(--az-margin, 40px));
+    max-height: calc(100dvh - 2 * var(--az-margin, 40px));
+    transform-origin: top left;
+    animation: az-zoom-in var(--az-duration, 0.3s) ease forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .az-dialog img {
+      animation-duration: 0.001s;
+    }
+  }
+
+  @keyframes az-zoom-in {
+    from {
+      transform: translate(var(--initial-x, 0px), var(--initial-y, 0px)) scale(var(--initial-scale, 1));
+    }
+    to {
+      transform: translate(var(--final-x, 0px), var(--final-y, 0px)) scale(1);
+    }
+  }
+
+  @keyframes az-zoom-out {
+    from {
+      transform: translate(var(--final-x, 0px), var(--final-y, 0px)) scale(1);
+    }
+    to {
+      transform: translate(var(--initial-x, 0px), var(--initial-y, 0px)) scale(var(--initial-scale, 1));
+    }
+  }
+</style>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('dialog[data-az-singleton]')
+  const dialogImg = dialog?.querySelector<HTMLImageElement>('img')
+  let closing = false
+
+  function open(trigger: HTMLImageElement) {
+    if (!dialog || !dialogImg || dialog.open) return
+
+    const rect = trigger.getBoundingClientRect()
+    dialogImg.src = trigger.dataset.zoomSrc || trigger.currentSrc || trigger.src
+    dialogImg.alt = trigger.alt
+
+    const margin = parseFloat(getComputedStyle(dialog).getPropertyValue('--az-margin')) || 40
+    const natW = trigger.naturalWidth || rect.width
+    const natH = trigger.naturalHeight || rect.height
+
+    const scale = Math.min(
+      (window.innerWidth - margin * 2) / natW,
+      (window.innerHeight - margin * 2) / natH,
+      1
+    )
+    const dispW = natW * scale
+    const dispH = natH * scale
+
+    dialog.style.setProperty('--initial-x', `${rect.left}px`)
+    dialog.style.setProperty('--initial-y', `${rect.top}px`)
+    dialog.style.setProperty('--initial-scale', `${rect.width / dispW}`)
+    dialog.style.setProperty('--final-x', `${(window.innerWidth - dispW) / 2}px`)
+    dialog.style.setProperty('--final-y', `${(window.innerHeight - dispH) / 2}px`)
+
+    dialogImg.style.width = `${dispW}px`
+    dialogImg.style.height = `${dispH}px`
+
+    // Force animation restart on repeated opens
+    dialogImg.style.animation = 'none'
+    void dialogImg.offsetWidth
+    dialogImg.style.animation = ''
+
+    dialog.showModal()
+  }
+
+  async function close() {
+    if (!dialog || !dialogImg || closing || !dialog.open) return
+    closing = true
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const duration = reducedMotion
+      ? 1
+      : parseFloat(getComputedStyle(dialog).getPropertyValue('--az-duration')) * 1000 || 300
+
+    dialogImg.style.animation = 'az-zoom-out var(--az-duration) ease forwards'
+    if (reducedMotion) dialogImg.style.animationDuration = '0.001s'
+    dialog.classList.add('az-closing')
+
+    await new Promise<void>((r) => setTimeout(r, duration))
+
+    dialog.close()
+    dialog.classList.remove('az-closing')
+    dialogImg.style.animation = ''
+    closing = false
+  }
+
+  function init() {
+    if (!dialog) return
+
+    dialog.addEventListener('click', (e) => { if (e.target === dialog) close() })
+    dialog.addEventListener('cancel', (e) => { e.preventDefault(); close() })
+
+    document.querySelectorAll<HTMLImageElement>('img[data-zoom]').forEach((img) => {
+      if (img.dataset.zoomInit) return
+      img.dataset.zoomInit = 'true'
+      img.addEventListener('click', () => open(img))
+    })
+  }
+
+  document.addEventListener('DOMContentLoaded', init)
+  document.addEventListener('astro:page-load', init)
+</script>

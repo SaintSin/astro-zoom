@@ -1,8 +1,5 @@
 ---
 // @components/page/Basehead.astro
-import BreadcrumbJsonLD from "@components/schema/BreadcrumbJsonLD.astro";
-import SiteNavigationJsonLD from "@components/schema/SiteNavigationJsonLD.astro";
-import WebsiteJsonLD from "@components/schema/WebsiteJsonLD.astro";
 import { Head } from "@felixicaza/astro-capo";
 import type { MetaData } from "@types";
 
@@ -58,7 +55,4 @@ import "@styles/style.css";
   <link rel="manifest" href="/manifest.webmanifest" />
   <meta name="generator" content={Astro.generator} />
   <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
-  <WebsiteJsonLD />
-  <SiteNavigationJsonLD />
-  <BreadcrumbJsonLD />
 </Head>

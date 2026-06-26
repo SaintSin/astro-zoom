@@ -1,0 +1,40 @@
+---
+// data-zoom demo — medium-zoom drop-in replacement pattern
+import AstroZoomInit from "@components/AstroZoomInit.astro";
+import image1 from "@images/panda-01.jpg";
+import Layout from "@layouts/BaseLayout.astro";
+import { Picture } from "astro:assets";
+
+const meta = {
+	title: "astro-zoom — data-zoom demo",
+	description: "Drop-in replacement for medium-zoom",
+	imageOG: "generic-social-1200x630.png",
+	altOG: "Alt text for OG image",
+};
+---
+
+<Layout metaData={meta}>
+  <AstroZoomInit />
+  <main class="wrapper flow">
+    <h1>data-zoom demo</h1>
+    <p>Add <code>data-zoom</code> to any image. No wrapper component needed.</p>
+
+    <h2>Single image</h2>
+    <Picture src={image1} alt="Panda" formats={["avif", "webp"]} data-zoom />
+
+    <h2>Grid</h2>
+    <div class="grid" data-layout="thirds">
+      <Picture src={image1} alt="Panda" formats={["avif", "webp"]} data-zoom />
+      <Picture src={image1} alt="Panda" formats={["avif", "webp"]} data-zoom />
+      <Picture src={image1} alt="Panda" formats={["avif", "webp"]} data-zoom />
+    </div>
+  </main>
+</Layout>
+
+<style>
+  img[data-zoom] {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+</style>
