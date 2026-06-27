@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.3 — 2026-06-27
+
+- Add `layout`, `widths`, and `sizes` props to `<AstroZoom>` for responsive image support (passed through to Astro's `<Picture>`)
+- Dialog `<Picture>` pinned to `layout="none"` to prevent responsive constraints on the zoomed image
+
 ## 0.1.2 — 2026-06-26
 
 - Add `imageClass` prop to `<AstroZoom>` — applies a CSS class to the thumbnail `<img>` element

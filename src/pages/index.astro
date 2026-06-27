@@ -2,6 +2,9 @@
 // pages/index.astro
 import AstroZoom from "@components/AstroZoom.astro";
 import image1 from "@images/panda-01.jpg";
+import image2 from "@images/panda-02.jpg";
+import image3 from "@images/panda-03.jpg";
+import image4 from "@images/panda-04.jpg";
 import Layout from "@layouts/BaseLayout.astro";
 
 const meta = {
@@ -15,7 +18,35 @@ const meta = {
 <Layout metaData={meta}>
   <main class="wrapper flow">
     <h1>astro-zoom</h1>
-    <p>Click any image to zoom. Click the backdrop or press Escape to close.</p>
+    <p>
+      A lightweight zoom component for Astro. Click any image to zoom it to the centre of the
+      viewport with a smooth animation. Click the backdrop or press <kbd>Escape</kbd> to close.
+    </p>
+    <ul>
+      <li>~2.8 KB shipped (JS + CSS) — ~1.4 KB gzipped</li>
+      <li>Uses Astro's <code>&lt;Picture&gt;</code> pipeline — avif/webp, optimised srcsets, built at compile time</li>
+      <li><code>&lt;dialog&gt;</code> based — no z-index battles, native Escape handling, accessible focus trap</li>
+      <li>ClientRouter compatible — no extra configuration needed</li>
+      <li><code>prefers-reduced-motion</code> aware</li>
+    </ul>
+
+    <h2><code>&lt;AstroZoom&gt;</code></h2>
+    <p>
+      The Astro-native approach. Wrap each image with <code>&lt;AstroZoom&gt;</code> — it renders a
+      <code>&lt;Picture&gt;</code> thumbnail and a full-resolution <code>&lt;Picture&gt;</code> inside
+      the dialog, both processed by Astro's image pipeline at build time.
+    </p>
+    <pre><code>{`---
+import { AstroZoom } from 'astro-zoom'
+import photo from '../assets/photo.jpg'
+---
+
+<AstroZoom
+  src={photo}
+  alt="A descriptive alt text"
+  caption="Brief caption shown on the page"
+  modalCaption="An expanded description shown inside the modal."
+/>`}</code></pre>
 
     <h2>Single image</h2>
     <AstroZoom
@@ -28,10 +59,42 @@ const meta = {
 
     <h2>Grid</h2>
     <div class="grid" data-layout="thirds">
-      <AstroZoom src={image1} alt="Panda" caption="A giant panda in its natural habitat" />
-      <AstroZoom src={image1} alt="Panda" />
-      <AstroZoom src={image1} alt="Panda" />
+      <AstroZoom src={image2} alt="Panda" caption="A giant panda at rest" />
+      <AstroZoom src={image3} alt="Panda" caption="Foraging in bamboo" />
+      <AstroZoom src={image4} alt="Panda" caption="Close-up portrait" />
     </div>
+
+    <h2>Props</h2>
+    <table>
+      <thead>
+        <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>src</code></td><td><code>ImageMetadata</code></td><td>required</td><td>Image imported via Astro's asset pipeline</td></tr>
+        <tr><td><code>alt</code></td><td><code>string</code></td><td>required</td><td>Alt text for thumbnail and modal image</td></tr>
+        <tr><td><code>caption</code></td><td><code>string</code></td><td>—</td><td>Brief caption as <code>&lt;figcaption&gt;</code> under the thumbnail</td></tr>
+        <tr><td><code>modalCaption</code></td><td><code>string</code></td><td>—</td><td>Expanded caption shown at the bottom of the modal</td></tr>
+        <tr><td><code>thumbnailWidth</code></td><td><code>number</code></td><td>natural width</td><td>Thumbnail width in pixels</td></tr>
+        <tr><td><code>layout</code></td><td><code>'responsive' | 'fixed' | 'full-width' | 'none'</code></td><td>—</td><td>Responsive image layout passed to <code>&lt;Picture&gt;</code></td></tr>
+        <tr><td><code>widths</code></td><td><code>number[]</code></td><td>—</td><td>Explicit srcset widths</td></tr>
+        <tr><td><code>sizes</code></td><td><code>string</code></td><td>—</td><td>Sizes attribute for the thumbnail</td></tr>
+        <tr><td><code>margin</code></td><td><code>number</code></td><td><code>40</code></td><td>Minimum gap in px between zoomed image and viewport edge</td></tr>
+        <tr><td><code>background</code></td><td><code>string</code></td><td>adaptive</td><td>Backdrop colour — defaults to <code>color-mix(in oklch, var(--color-bg) 95%, transparent)</code></td></tr>
+        <tr><td><code>duration</code></td><td><code>number</code></td><td><code>0.3</code></td><td>Animation duration in seconds</td></tr>
+        <tr><td><code>class</code></td><td><code>string</code></td><td>—</td><td>CSS class on the outer <code>&lt;figure&gt;</code></td></tr>
+        <tr><td><code>imageClass</code></td><td><code>string</code></td><td>—</td><td>CSS class on the thumbnail <code>&lt;img&gt;</code></td></tr>
+      </tbody>
+    </table>
+
+    <h2>Sizing thumbnails</h2>
+    <p>
+      <code>&lt;AstroZoom&gt;</code> renders as a <code>&lt;figure&gt;</code>. To fill the container:
+    </p>
+    <pre><code>{`.az-trigger img {
+  display: block;
+  width: 100%;
+  height: auto;
+}`}</code></pre>
   </main>
 </Layout>
 
@@ -40,5 +103,32 @@ const meta = {
     display: block;
     width: 100%;
     height: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+  th, td {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--color-border, #ddd);
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    font-weight: 600;
+  }
+  pre {
+    padding: 1rem;
+    overflow-x: auto;
+    background: var(--color-surface, #f5f5f5);
+    border-radius: 4px;
+  }
+  kbd {
+    font-size: 0.85em;
+    padding: 0.1em 0.4em;
+    border: 1px solid currentColor;
+    border-radius: 3px;
   }
 </style>

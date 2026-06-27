@@ -8,6 +8,9 @@ interface Props {
 	caption?: string;
 	modalCaption?: string;
 	thumbnailWidth?: number;
+	layout?: "responsive" | "fixed" | "full-width" | "none";
+	widths?: number[];
+	sizes?: string;
 	margin?: number;
 	background?: string;
 	duration?: number;
@@ -21,6 +24,9 @@ const {
 	caption,
 	modalCaption,
 	thumbnailWidth,
+	layout,
+	widths,
+	sizes,
 	margin = 40,
 	background = "color-mix(in oklch, var(--color-bg, oklch(99% 0 0)) 95%, transparent)",
 	duration = 0.3,
@@ -35,6 +41,9 @@ const {
     alt={alt}
     formats={['avif', 'webp']}
     width={thumbnailWidth ?? src.width}
+    layout={layout}
+    widths={widths}
+    sizes={sizes}
     class={imageClass}
     data-az-thumb
   />
@@ -46,7 +55,7 @@ const {
     data-az-h={src.height}
     style={`--az-margin:${margin}px;--az-bg:${background};--az-duration:${duration}s`}
   >
-    <Picture src={src} alt={alt} formats={['avif', 'webp']} loading="eager" />
+    <Picture src={src} alt={alt} formats={['avif', 'webp']} layout="none" loading="eager" />
     {modalCaption && <p class="az-modal-caption">{modalCaption}</p>}
   </dialog>
 </figure>

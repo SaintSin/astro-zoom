@@ -2,11 +2,14 @@
 // data-zoom demo — medium-zoom drop-in replacement pattern
 import AstroZoomInit from "@components/AstroZoomInit.astro";
 import image1 from "@images/panda-01.jpg";
+import image5 from "@images/panda-05.jpg";
+import image6 from "@images/panda-06.jpg";
+import image7 from "@images/panda-07.jpg";
 import Layout from "@layouts/BaseLayout.astro";
 import { Picture } from "astro:assets";
 
 const meta = {
-	title: "astro-zoom — data-zoom demo",
+	title: "astro-zoom — data-zoom",
 	description: "Drop-in replacement for medium-zoom",
 	imageOG: "generic-social-1200x630.png",
 	altOG: "Alt text for OG image",
@@ -16,18 +19,70 @@ const meta = {
 <Layout metaData={meta}>
   <AstroZoomInit />
   <main class="wrapper flow">
-    <h1>data-zoom demo</h1>
-    <p>Add <code>data-zoom</code> to any image. No wrapper component needed.</p>
+    <h1>astro-zoom — <code>data-zoom</code></h1>
+    <p>
+      A drop-in replacement for <a href="https://github.com/francoischalifour/medium-zoom">medium-zoom</a>.
+      Add <code>&lt;AstroZoomInit /&gt;</code> once to your layout, then add <code>data-zoom</code> to
+      any image — Astro's <code>&lt;Picture&gt;</code>, plain <code>&lt;img&gt;</code> tags, images from
+      a CMS, or Markdown content.
+    </p>
+    <pre><code>{`---
+// Layout.astro
+import { AstroZoomInit } from 'astro-zoom'
+---
+<html>
+  <body>
+    <slot />
+    <AstroZoomInit />
+  </body>
+</html>`}</code></pre>
+    <p>Then add <code>data-zoom</code> to any image:</p>
+    <pre><code>{`<Picture src={photo} alt="Description" formats={['avif', 'webp']} data-zoom />
+
+<!-- plain img -->
+<img src="/images/photo.jpg" alt="Description" data-zoom />
+
+<!-- zoom to a separate high-res source -->
+<img src="thumb.jpg" alt="Description" data-zoom data-zoom-src="full.jpg" />`}</code></pre>
 
     <h2>Single image</h2>
     <Picture src={image1} alt="Panda" formats={["avif", "webp"]} data-zoom />
 
     <h2>Grid</h2>
     <div class="grid" data-layout="thirds">
-      <Picture src={image1} alt="Panda" formats={["avif", "webp"]} data-zoom />
-      <Picture src={image1} alt="Panda" formats={["avif", "webp"]} data-zoom />
-      <Picture src={image1} alt="Panda" formats={["avif", "webp"]} data-zoom />
+      <Picture src={image5} alt="Panda" formats={["avif", "webp"]} data-zoom />
+      <Picture src={image6} alt="Panda" formats={["avif", "webp"]} data-zoom />
+      <Picture src={image7} alt="Panda" formats={["avif", "webp"]} data-zoom />
     </div>
+
+    <h2>Props</h2>
+    <table>
+      <thead>
+        <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>margin</code></td><td><code>number</code></td><td><code>40</code></td><td>Minimum gap in px between zoomed image and viewport edge</td></tr>
+        <tr><td><code>background</code></td><td><code>string</code></td><td>adaptive</td><td>Backdrop colour — defaults to <code>color-mix(in oklch, var(--color-bg) 95%, transparent)</code></td></tr>
+        <tr><td><code>duration</code></td><td><code>number</code></td><td><code>0.3</code></td><td>Animation duration in seconds</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Events</h2>
+    <p>Custom events are dispatched on the trigger <code>&lt;img&gt;</code>, bubbling up the DOM:</p>
+    <table>
+      <thead>
+        <tr><th>Event</th><th>Fires</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>astro-zoom:open</code></td><td>When zoom begins (before animation)</td></tr>
+        <tr><td><code>astro-zoom:opened</code></td><td>After the zoom-in animation completes</td></tr>
+        <tr><td><code>astro-zoom:close</code></td><td>When close begins (before animation)</td></tr>
+        <tr><td><code>astro-zoom:closed</code></td><td>After the dialog closes</td></tr>
+      </tbody>
+    </table>
+    <pre><code>{`document.addEventListener('astro-zoom:closed', (e) => {
+  analytics.track('image_zoomed', { src: e.target.src })
+})`}</code></pre>
   </main>
 </Layout>
 
@@ -36,5 +91,26 @@ const meta = {
     display: block;
     width: 100%;
     height: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+  th, td {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--color-border, #ddd);
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    font-weight: 600;
+  }
+  pre {
+    padding: 1rem;
+    overflow-x: auto;
+    background: var(--color-surface, #f5f5f5);
+    border-radius: 4px;
   }
 </style>
