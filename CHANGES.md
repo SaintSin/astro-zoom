@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.5 — 2026-07-01
+
+- Fix `cursor: zoom-in` scoped to the image only (`az-trigger img`) — no longer applies to the whole figure
+
 ## 0.1.4 — 2026-07-01
 
 - Add `body:has(.az-dialog[open]) { overflow: hidden }` — prevents page scrolling while the modal is open
