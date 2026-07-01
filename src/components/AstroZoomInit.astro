@@ -134,6 +134,13 @@ const {
   let closing = false
   let currentTrigger: HTMLImageElement | null = null
 
+  // Defaults captured once, before any per-image override is applied
+  const defaults = {
+    margin: dialog?.style.getPropertyValue('--az-margin') ?? '40px',
+    background: dialog?.style.getPropertyValue('--az-bg') ?? '',
+    duration: dialog?.style.getPropertyValue('--az-duration') ?? '0.3s',
+  }
+
   function dispatch(name: string) {
     currentTrigger?.dispatchEvent(new CustomEvent(`astro-zoom:${name}`, { bubbles: true }))
   }
@@ -146,6 +153,11 @@ const {
     dialogImg.src = trigger.dataset.zoomSrc || trigger.currentSrc || trigger.src
     dialogImg.alt = trigger.alt
     if (dialogCaption) dialogCaption.textContent = trigger.dataset.caption ?? ''
+
+    // Per-image overrides, falling back to the component defaults
+    dialog.style.setProperty('--az-margin', trigger.dataset.margin ? `${trigger.dataset.margin}px` : defaults.margin)
+    dialog.style.setProperty('--az-bg', trigger.dataset.background || defaults.background)
+    dialog.style.setProperty('--az-duration', trigger.dataset.duration ? `${trigger.dataset.duration}s` : defaults.duration)
 
     const margin = parseFloat(getComputedStyle(dialog).getPropertyValue('--az-margin')) || 40
     const natW = trigger.naturalWidth || rect.width

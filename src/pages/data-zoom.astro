@@ -55,22 +55,51 @@ import { AstroZoomInit } from 'astro-zoom'
     <div class="grid" data-layout="thirds">
       <Picture src={image5} alt="Panda" formats={["avif", "webp"]} data-zoom data-caption="A giant panda at rest" />
       <Picture src={image6} alt="Panda" formats={["avif", "webp"]} data-zoom data-caption="Foraging in bamboo" />
-      <Picture src={image7} alt="Panda" formats={["avif", "webp"]} data-zoom data-caption="Close-up portrait" />
+      <Picture src={image7} alt="Panda" formats={["avif", "webp"]} data-zoom data-caption="Close-up portrait"   data-background="rgba(139, 0, 0, 0.9)"
+  data-duration="0.9"/>
     </div>
 
-    <h2>Props</h2>
+    <h2><code>&lt;AstroZoomInit&gt;</code> props</h2>
+    <p>Set once on the singleton component — applies to every zoomed image on the page.</p>
     <table>
       <thead>
         <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr><td><code>data-caption</code></td><td>HTML attribute</td><td>—</td><td>Caption shown inside the modal (on the trigger <code>&lt;img&gt;</code>)</td></tr>
-        <tr><td><code>data-zoom-src</code></td><td>HTML attribute</td><td>—</td><td>Separate high-res URL to zoom to instead of the thumbnail src</td></tr>
         <tr><td><code>margin</code></td><td><code>number</code></td><td><code>40</code></td><td>Minimum gap in px between zoomed image and viewport edge</td></tr>
         <tr><td><code>background</code></td><td><code>string</code></td><td>adaptive</td><td>Backdrop colour — defaults to <code>color-mix(in oklch, var(--color-bg) 95%, transparent)</code></td></tr>
         <tr><td><code>duration</code></td><td><code>number</code></td><td><code>0.3</code></td><td>Animation duration in seconds</td></tr>
       </tbody>
     </table>
+    <pre><code>{`<AstroZoomInit
+  margin={60}
+  background="rgba(0, 0, 0, 0.9)"
+  duration={0.5}
+/>`}</code></pre>
+
+    <h2>Per-image attributes</h2>
+    <p>Set on each trigger image — not on <code>&lt;AstroZoomInit&gt;</code>.</p>
+    <table>
+      <thead>
+        <tr><th>Attribute</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>data-zoom</code></td><td>Marks the image as zoomable</td></tr>
+        <tr><td><code>data-caption</code></td><td>Caption shown inside the modal</td></tr>
+        <tr><td><code>data-zoom-src</code></td><td>Separate high-res URL to zoom to instead of the thumbnail src</td></tr>
+        <tr><td><code>data-margin</code></td><td>Overrides <code>margin</code> for this image only (number, in px)</td></tr>
+        <tr><td><code>data-background</code></td><td>Overrides <code>background</code> for this image only</td></tr>
+        <tr><td><code>data-duration</code></td><td>Overrides <code>duration</code> for this image only (number, in seconds)</td></tr>
+      </tbody>
+    </table>
+    <pre><code>{`<Picture
+  src={photo}
+  alt="Description"
+  formats={['avif', 'webp']}
+  data-zoom
+  data-background="rgba(139, 0, 0, 0.9)"
+  data-duration="0.5"
+/>`}</code></pre>
 
     <h2>Events</h2>
     <p>Custom events are dispatched on the trigger <code>&lt;img&gt;</code>, bubbling up the DOM:</p>
