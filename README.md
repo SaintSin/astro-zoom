@@ -79,7 +79,20 @@ To zoom to a different (higher-res) source, use `data-zoom-src`:
 <img src="thumb.jpg" alt="Description" data-zoom data-zoom-src="full.jpg" />
 ```
 
-Click the image to zoom. Click the backdrop or press Escape to close.
+Click the image to zoom. Click anywhere in the modal or press Escape to close.
+
+Add `data-caption` for a caption shown in the modal, and per-image `data-margin`, `data-background`, or `data-duration` to override the component defaults for that image:
+
+```html
+<img
+  src="/images/photo.jpg"
+  alt="Description"
+  data-zoom
+  data-caption="Caption shown in the modal"
+  data-background="rgba(139, 0, 0, 0.9)"
+  data-duration="0.5"
+/>
+```
 
 ## Props
 
@@ -100,11 +113,26 @@ Click the image to zoom. Click the backdrop or press Escape to close.
 
 ### `<AstroZoomInit>`
 
+Set once on the singleton component — applies to every zoomed image on the page.
+
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `margin` | `number` | `40` | Minimum gap in pixels between the zoomed image and the viewport edge |
 | `background` | `string` | `color-mix(in oklch, var(--color-bg, oklch(99% 0 0)) 95%, transparent)` | Modal backdrop colour |
 | `duration` | `number` | `0.3` | Animation duration in seconds |
+
+### Per-image `data-*` attributes
+
+Set on each trigger image — not on `<AstroZoomInit>`.
+
+| Attribute | Description |
+|---|---|
+| `data-zoom` | Marks the image as zoomable |
+| `data-caption` | Caption shown inside the modal |
+| `data-zoom-src` | Separate high-res URL to zoom to instead of the thumbnail src |
+| `data-margin` | Overrides `margin` for this image only (number, in px) |
+| `data-background` | Overrides `background` for this image only |
+| `data-duration` | Overrides `duration` for this image only (number, in seconds) |
 
 ## Examples
 
