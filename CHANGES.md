@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.10 — 2026-07-01
+
+- Republish to fix missing README on the npm package page — the 0.1.9 tarball contained a valid `README.md`, but the registry's `readme` metadata field was empty (a known `pnpm publish` quirk)
+
 ## 0.1.9 — 2026-07-01
 
 - Change default `background` from `color-mix(in oklch, var(--color-bg) 95%, transparent)` to fully opaque `var(--color-bg, oklch(99% 0 0))` — a translucent backdrop bled distracting page content through behind the modal
