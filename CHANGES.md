@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.7 — 2026-07-01
+
+- Fix click-to-close — the `<figure>` wrapper added in 0.1.4 filled the entire dialog, silently breaking the `e.target === dialog` check (Escape was the only working close method)
+- Clicking anywhere in the modal (image or background) now closes it, with a `zoom-out` cursor
+
 ## 0.1.6 — 2026-07-01
 
 - Add per-image `data-margin`, `data-background`, `data-duration` attributes to `<AstroZoomInit>` — override the singleton's defaults for individual images
