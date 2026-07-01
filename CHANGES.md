@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.4 — 2026-07-01
+
+- Add `body:has(.az-dialog[open]) { overflow: hidden }` — prevents page scrolling while the modal is open
+- Modal in `<AstroZoom>` now uses semantic `<figure><figcaption>` instead of `<p class="az-modal-caption">`
+- Add `data-caption` attribute support to `<AstroZoomInit>` — add to trigger images for modal captions
+
 ## 0.1.3 — 2026-06-27
 
 - Add `layout`, `widths`, and `sizes` props to `<AstroZoom>` for responsive image support (passed through to Astro's `<Picture>`)

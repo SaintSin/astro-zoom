@@ -18,10 +18,17 @@ const {
   aria-label="Zoomed image"
   style={`--az-margin:${margin}px;--az-bg:${background};--az-duration:${duration}s`}
 >
-  <img class="az-img" src="" alt="" />
+  <figure>
+    <img class="az-img" src="" alt="" />
+    <figcaption class="az-caption"></figcaption>
+  </figure>
 </dialog>
 
 <style is:global>
+  body:has(.az-dialog[open]) {
+    overflow: hidden;
+  }
+
   img[data-zoom] {
     cursor: zoom-in;
   }
@@ -51,6 +58,35 @@ const {
   }
 
   .az-dialog.az-closing::backdrop {
+    opacity: 0;
+  }
+
+  .az-dialog figure {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+  }
+
+  .az-dialog figcaption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem;
+    text-align: center;
+    opacity: 0;
+    transition: opacity var(--az-duration, 0.3s) ease;
+  }
+
+  .az-dialog figcaption:empty {
+    display: none;
+  }
+
+  .az-dialog[open] figcaption {
+    opacity: 1;
+  }
+
+  .az-dialog.az-closing figcaption {
     opacity: 0;
   }
 
@@ -94,6 +130,7 @@ const {
 <script>
   const dialog = document.querySelector<HTMLDialogElement>('dialog[data-az-singleton]')
   const dialogImg = dialog?.querySelector<HTMLImageElement>('img')
+  const dialogCaption = dialog?.querySelector<HTMLElement>('figcaption')
   let closing = false
   let currentTrigger: HTMLImageElement | null = null
 
@@ -108,6 +145,7 @@ const {
     const rect = trigger.getBoundingClientRect()
     dialogImg.src = trigger.dataset.zoomSrc || trigger.currentSrc || trigger.src
     dialogImg.alt = trigger.alt
+    if (dialogCaption) dialogCaption.textContent = trigger.dataset.caption ?? ''
 
     const margin = parseFloat(getComputedStyle(dialog).getPropertyValue('--az-margin')) || 40
     const natW = trigger.naturalWidth || rect.width

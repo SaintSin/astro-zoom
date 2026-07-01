@@ -39,6 +39,9 @@ import { AstroZoomInit } from 'astro-zoom'
     <p>Then add <code>data-zoom</code> to any image:</p>
     <pre><code>{`<Picture src={photo} alt="Description" formats={['avif', 'webp']} data-zoom />
 
+<!-- with a modal caption -->
+<Picture src={photo} alt="Description" formats={['avif', 'webp']} data-zoom data-caption="Caption shown in the modal" />
+
 <!-- plain img -->
 <img src="/images/photo.jpg" alt="Description" data-zoom />
 
@@ -46,13 +49,13 @@ import { AstroZoomInit } from 'astro-zoom'
 <img src="thumb.jpg" alt="Description" data-zoom data-zoom-src="full.jpg" />`}</code></pre>
 
     <h2>Single image</h2>
-    <Picture src={image1} alt="Panda" formats={["avif", "webp"]} data-zoom />
+    <Picture src={image1} alt="Panda" formats={["avif", "webp"]} data-zoom  data-caption="Caption shown in the modal"/>
 
     <h2>Grid</h2>
     <div class="grid" data-layout="thirds">
-      <Picture src={image5} alt="Panda" formats={["avif", "webp"]} data-zoom />
-      <Picture src={image6} alt="Panda" formats={["avif", "webp"]} data-zoom />
-      <Picture src={image7} alt="Panda" formats={["avif", "webp"]} data-zoom />
+      <Picture src={image5} alt="Panda" formats={["avif", "webp"]} data-zoom data-caption="A giant panda at rest" />
+      <Picture src={image6} alt="Panda" formats={["avif", "webp"]} data-zoom data-caption="Foraging in bamboo" />
+      <Picture src={image7} alt="Panda" formats={["avif", "webp"]} data-zoom data-caption="Close-up portrait" />
     </div>
 
     <h2>Props</h2>
@@ -61,6 +64,8 @@ import { AstroZoomInit } from 'astro-zoom'
         <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
       </thead>
       <tbody>
+        <tr><td><code>data-caption</code></td><td>HTML attribute</td><td>—</td><td>Caption shown inside the modal (on the trigger <code>&lt;img&gt;</code>)</td></tr>
+        <tr><td><code>data-zoom-src</code></td><td>HTML attribute</td><td>—</td><td>Separate high-res URL to zoom to instead of the thumbnail src</td></tr>
         <tr><td><code>margin</code></td><td><code>number</code></td><td><code>40</code></td><td>Minimum gap in px between zoomed image and viewport edge</td></tr>
         <tr><td><code>background</code></td><td><code>string</code></td><td>adaptive</td><td>Backdrop colour — defaults to <code>color-mix(in oklch, var(--color-bg) 95%, transparent)</code></td></tr>
         <tr><td><code>duration</code></td><td><code>number</code></td><td><code>0.3</code></td><td>Animation duration in seconds</td></tr>

@@ -55,12 +55,18 @@ const {
     data-az-h={src.height}
     style={`--az-margin:${margin}px;--az-bg:${background};--az-duration:${duration}s`}
   >
-    <Picture src={src} alt={alt} formats={['avif', 'webp']} layout="none" loading="eager" />
-    {modalCaption && <p class="az-modal-caption">{modalCaption}</p>}
+    <figure>
+      <Picture src={src} alt={alt} formats={['avif', 'webp']} layout="none" loading="eager" />
+      {modalCaption && <figcaption>{modalCaption}</figcaption>}
+    </figure>
   </dialog>
 </figure>
 
 <style is:global>
+  body:has(.az-dialog[open]) {
+    overflow: hidden;
+  }
+
   .az-trigger {
     cursor: zoom-in;
   }
@@ -72,23 +78,28 @@ const {
     opacity: 0.7;
   }
 
-  .az-modal-caption {
+  .az-dialog figure {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+  }
+
+  .az-dialog figcaption {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
     padding: 1.5rem;
-    margin: 0;
     text-align: center;
     opacity: 0;
     transition: opacity var(--az-duration, 0.3s) ease;
   }
 
-  .az-dialog[open] .az-modal-caption {
+  .az-dialog[open] figcaption {
     opacity: 1;
   }
 
-  .az-dialog.az-closing .az-modal-caption {
+  .az-dialog.az-closing figcaption {
     opacity: 0;
   }
 
