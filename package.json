@@ -1,6 +1,6 @@
 {
 	"name": "astro-zoom",
-	"version": "0.1.8",
+	"version": "0.1.9",
 	"type": "module",
 	"description": "A lightweight zoom component for Astro. Uses Astro's Image pipeline, <3KB shipped.",
 	"author": {

@@ -12,9 +12,9 @@ A lightweight zoom component for Astro. Click any image to zoom it to the center
 ## Installation
 
 ```sh
-npx astro add astro-zoom
-# or
 pnpm add astro-zoom
+# or
+npm install astro-zoom
 ```
 
 ## Usage
@@ -106,7 +106,7 @@ Add `data-caption` for a caption shown in the modal, and per-image `data-margin`
 | `modalCaption` | `string` | — | Expanded caption shown at the bottom of the modal |
 | `thumbnailWidth` | `number` | natural width | Width of the thumbnail in pixels |
 | `margin` | `number` | `40` | Minimum gap in pixels between the zoomed image and the viewport edge |
-| `background` | `string` | `color-mix(in oklch, var(--color-bg, oklch(99% 0 0)) 95%, transparent)` | Modal backdrop colour |
+| `background` | `string` | `var(--color-bg, oklch(99% 0 0))` | Modal backdrop colour |
 | `duration` | `number` | `0.3` | Animation duration in seconds |
 | `class` | `string` | — | CSS class applied to the outer `<figure>` element |
 | `imageClass` | `string` | — | CSS class applied to the thumbnail `<img>` element |
@@ -118,7 +118,7 @@ Set once on the singleton component — applies to every zoomed image on the pag
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `margin` | `number` | `40` | Minimum gap in pixels between the zoomed image and the viewport edge |
-| `background` | `string` | `color-mix(in oklch, var(--color-bg, oklch(99% 0 0)) 95%, transparent)` | Modal backdrop colour |
+| `background` | `string` | `var(--color-bg, oklch(99% 0 0))` | Modal backdrop colour |
 | `duration` | `number` | `0.3` | Animation duration in seconds |
 
 ### Per-image `data-*` attributes

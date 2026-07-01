@@ -7,7 +7,7 @@ interface Props {
 
 const {
 	margin = 40,
-	background = "color-mix(in oklch, var(--color-bg, oklch(99% 0 0)) 95%, transparent)",
+	background = "var(--color-bg, oklch(99% 0 0))",
 	duration = 0.3,
 } = Astro.props;
 ---
@@ -48,7 +48,7 @@ const {
   }
 
   .az-dialog::backdrop {
-    background: var(--az-bg, color-mix(in oklch, var(--color-bg, oklch(99% 0 0)) 95%, transparent));
+    background: var(--az-bg, var(--color-bg, oklch(99% 0 0)));
     opacity: 0;
     transition: opacity var(--az-duration, 0.3s) ease;
   }

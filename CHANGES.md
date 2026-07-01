@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.9 — 2026-07-01
+
+- Change default `background` from `color-mix(in oklch, var(--color-bg) 95%, transparent)` to fully opaque `var(--color-bg, oklch(99% 0 0))` — a translucent backdrop bled distracting page content through behind the modal
+- Fix README installation instructions — `npx astro add astro-zoom` was wrong (it's not a registered Astro integration); replaced with `pnpm add` / `npm install`
+
 ## 0.1.8 — 2026-07-01
 
 - Docs only: fix stale README — add missing `<AstroZoomInit>` per-image `data-*` attributes table (`data-caption`, `data-zoom-src`, `data-margin`, `data-background`, `data-duration`), correct "click the backdrop" to "click anywhere in the modal" to match the 0.1.7 close behaviour
