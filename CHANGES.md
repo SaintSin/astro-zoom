@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.8 — 2026-07-01
+
+- Docs only: fix stale README — add missing `<AstroZoomInit>` per-image `data-*` attributes table (`data-caption`, `data-zoom-src`, `data-margin`, `data-background`, `data-duration`), correct "click the backdrop" to "click anywhere in the modal" to match the 0.1.7 close behaviour
+
 ## 0.1.7 — 2026-07-01
 
 - Fix click-to-close — the `<figure>` wrapper added in 0.1.4 filled the entire dialog, silently breaking the `e.target === dialog` check (Escape was the only working close method)
